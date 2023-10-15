@@ -22,6 +22,14 @@ Route::namespace('Main')->middleware('auth')->group(function () {
             Route::post('/update', 'update')->name('update');
             Route::delete('/delete/{id}', 'delete')->name('delete');
         });
+
+    Route::controller(AbsensiController::class)
+        ->as('absensi.')
+        ->prefix('absensi')
+        ->group(function () {
+            Route::get('/all', 'all')->name('all');
+            Route::get('/by-name', 'byName')->name('by-name');
+        });
 });
 
 Route::namespace('Pegawai')->as('staff.')->prefix('/staff')->middleware('auth')->group(function () {

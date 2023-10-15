@@ -10,7 +10,8 @@
 @endsection
 
 @push('script')
-    <script src="https://unpkg.com/html5-qrcode"></script>
+    {{-- <script src="https://unpkg.com/html5-qrcode"></script> --}}
+    <script src="{{asset('assets/js/html5-qrcode.min.js')}}"></script>
     <script>
         function qrcode(){
             $.get("/staff/qrcode",function (data) {
