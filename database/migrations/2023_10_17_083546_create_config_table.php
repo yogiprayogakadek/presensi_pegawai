@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absensi', function (Blueprint $table) {
+        Schema::create('config', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('pegawai_id', 50);
-            $table->foreign('pegawai_id')->references('id')->on('pegawai')->onDelete('cascade');
-            $table->time('jam_masuk')->nullable();
-            $table->time('jam_keluar')->nullable();
-            $table->date('tanggal');
+            $table->string('nama', 100);
+            $table->json('json_data');
             $table->timestamps();
         });
     }
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absensi');
+        Schema::dropIfExists('config');
     }
 };

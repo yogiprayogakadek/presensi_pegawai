@@ -9,12 +9,15 @@ use Illuminate\Http\Request;
 
 class AbsensiController extends Controller
 {
-    public function all()
+    public function index()
     {
+        $firstOfDate = Carbon::now()->startOfMonth();
+        $lastOfDate = Carbon::now()->endOfMonth();
+
         $pegawai = Pegawai::with('absensi')->get();
 
-        $fromDate = Carbon::parse("2023-10-10");
-        $toDate = Carbon::parse("2023-10-20");
+        $fromDate = Carbon::parse($firstOfDate);
+        $toDate = Carbon::parse($lastOfDate);
 
 
         $dates = [];
@@ -26,12 +29,43 @@ class AbsensiController extends Controller
             $dates[] = $date->toDateString();
         }
 
-
-        return view('main.absensi.all')->with([
+        return view('main.absensi.all.index')->with([
             'dateFormatted' => $dateFormatted,
             'dates' => $dates,
-            'pegawai' => $pegawai
+            'pegawai' => $pegawai,
+            'firstOfDate' => $firstOfDate,
+            'lastOfDate' => $lastOfDate,
         ]);
+    }
+
+    public function filter(Request $request)
+    {
+        $pegawai = Pegawai::with('absensi')->get();
+
+        $fromDate = Carbon::parse($request->fromDate);
+        $toDate = Carbon::parse($request->toDate);
+
+
+        $dates = [];
+        $dateFormatted = [];
+
+        for ($date = $fromDate; $date->lte($toDate); $date->addDay()) {
+            $formattedDate = '<span style="font-size: smaller;"><sup>' . $date->day . '</sup>/<sub>' . $date->month . '</sub>/<small>' . $date->year . '</small></span>';
+            $dateFormatted[] = $formattedDate;
+            $dates[] = $date->toDateString();
+        }
+
+        $data = [
+            'data' => view('main.absensi.all.render')->with([
+                'dateFormatted' => $dateFormatted,
+                'dates' => $dates,
+                'pegawai' => $pegawai,
+                'fromDate' => $fromDate,
+                'toDate' => $toDate,
+            ])-> render()
+        ];
+
+        return response()->json($data);
     }
 
     public function byName()

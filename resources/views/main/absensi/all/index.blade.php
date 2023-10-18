@@ -3,6 +3,9 @@
 @section('page-title', 'Absensi')
 @section('page-sub-title', 'Data')
 
+@push('css')
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+@endpush
 
 @section('content')
     <div class="row">
@@ -19,12 +22,12 @@
                                 <div class="col-4">
                                     <span>Dari Tanggal</span>
                                     <input type="date" name="from_date" id="from_date" class="form-control"
-                                        value="{{ date('Y-m-d') }}">
+                                        value="{{ date('Y-m-01') }}">
                                 </div>
                                 <div class="col-4">
                                     <span>Sampai tanggal</span>
                                     <input type="date" name="to_date" id="to_date" class="form-control"
-                                        value="{{ date('Y-m-d') }}">
+                                        value="{{ date('Y-m-t') }}">
                                 </div>
                                 <div class="col-2">
                                     <br>
@@ -47,13 +50,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <table class="table table-hover table-bordered" id="tableData">
+                <div class="card-body" id="render">
+                    <table class="table table-hover table-bordered table-responsive">
                         <thead>
                             <tr class="text-center">
                                 <th rowspan="2">No</th>
                                 <th rowspan="2">Nama</th>
-                                <th colspan="{{ count($dates) }}">Tanggal</th>
+                                <th colspan="{{ count($dates) }}">Tanggal (Absensi 1 bulan terakhir)</th>
                             </tr>
                             <tr>
                                 @foreach ($dateFormatted as $df)
@@ -100,44 +103,62 @@
                 );
             @endif
 
-            var table = $('#tableData').DataTable({
-                language: {
-                    paginate: {
-                        previous: "Previous",
-                        next: "Next"
-                    },
-                    info: "Showing _START_ to _END_ from _TOTAL_ data",
-                    infoEmpty: "Showing 0 to 0 from 0 data",
-                    lengthMenu: "Showing _MENU_ data",
-                    search: "Search:",
-                    emptyTable: "Data doesn't exists",
-                    zeroRecords: "Data doesn't match",
-                    loadingRecords: "Loading..",
-                    processing: "Processing...",
-                    infoFiltered: "(filtered from _MAX_ total data)"
-                },
-                lengthMenu: [
-                    [25, 50, 75, 100, -1],
-                    [25, 50, 75, 100, "All"]
-                ],
-                order: [
-                    [0, 'desc']
-                ],
-                "rowCallback": function(row, data, index) {
-                    // Set the row number as the first cell in each row
-                    $('td:eq(0)', row).html(index + 1);
-                }
-            });
-
-            // Update row numbers when the table is sorted
-            table.on('order.dt search.dt', function() {
-                table.column(0, {
-                    search: 'applied',
-                    order: 'applied'
-                }).nodes().each(function(cell, i) {
-                    cell.innerHTML = i + 1;
+            $('.btn-filter').on('click', function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
                 });
-            }).draw();
+
+                let fromDate = $('#from_date').val();
+                let toDate = $('#to_date').val();
+
+                if (!isNaN(new Date(fromDate)) && !isNaN(new Date(toDate))) {
+                    var intervalInMilliseconds = Math.abs(new Date(toDate) - new Date(fromDate));
+                    var days = Math.floor(intervalInMilliseconds / (1000 * 60 * 60 * 24));
+
+                    if ((days + 1) <= 31) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/absensi/all/filter",
+                            data: {
+                                fromDate: fromDate,
+                                toDate: toDate
+                            },
+                            dataType: "JSON",
+                            success: function(response) {
+                                $('#render').html(response.data)
+                            }
+                        });
+                    } else {
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-center",
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr["error"]("Filter tidak boleh lebih dari 31 hari")
+                    }
+                }
+
+            })
+
+            $('#from_date').on('input', function() {
+                var fromDate = $('#from_date').val();
+                $('#to_date').attr('min', fromDate);
+                $('#to_date').prop('disabled', false);
+            });
         });
     </script>
 @endpush

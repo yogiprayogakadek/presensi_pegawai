@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
+use App\Models\Config;
 use App\Models\LogQrcode;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -15,7 +17,23 @@ class DashboardController extends Controller
 
     public function absensi()
     {
-        return view('main.dashboard.absensi');
+        $config = Config::first();
+        $json = json_decode($config->json_data, true);
+
+        $jamMasuk_awal = $json['jam_masuk']['batas_awal'];
+        $jamMasuk_akhir = $json['jam_masuk']['batas_akhir'];
+        $jamKeluar_awal = $json['jam_keluar']['batas_awal'];
+        $jamKeluar_akhir = $json['jam_keluar']['batas_akhir'];
+        return view('main.dashboard.absensi', compact(
+            'jamMasuk_awal','jamMasuk_akhir', 'jamKeluar_awal', 'jamKeluar_akhir'
+        ));
+    }
+
+    public function configDB()
+    {
+        $config = Config::first();
+        $json = json_decode($config->json_data, true);
+        return response()->json($json);
     }
 
     public function updateLogQr()
@@ -28,7 +46,14 @@ class DashboardController extends Controller
                 $jsonData = json_decode($log->json_data, true);
 
                 // get last data
-                if($jsonData[count($jsonData)-1]['status'] === false) {
+                // if($jsonData[count($jsonData)-1]['status'] === false) {
+                //     $jsonData[count($jsonData)-1]['qr_code'] = $qrCode;
+                //     $log->json_data = json_encode($jsonData, JSON_PRETTY_PRINT);
+                //     $log->save();
+                // }
+
+                // NEW UPDATE
+                if($jsonData[count($jsonData)-1]['status_masuk'] == false || $jsonData[count($jsonData)-1]['status_keluar'] === false) {
                     $jsonData[count($jsonData)-1]['qr_code'] = $qrCode;
                     $log->json_data = json_encode($jsonData, JSON_PRETTY_PRINT);
                     $log->save();

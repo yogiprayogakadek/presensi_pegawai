@@ -51,48 +51,114 @@
     <script>
         function updateQrLogDB() {
             setInterval(() => {
-                $.get("/update/log-qr", function (data) {
+                $.get("/update/log-qr", function(data) {
                     console.log(data);
                 });
             }, 30000);
         }
 
-        $(document).ready(function () {
+        // function configDB() {
+        //     $.get("/config/database", function(data) {
+        //         var formattedTime = new Intl.DateTimeFormat('en-US', {
+        //             timeStyle: 'medium',
+        //             hour12: false
+        //         }).format(new Date());
+
+        //         if(formattedTime > data.jam_masuk.batas_akhir && formattedTime) {
+        //             toastr["warning"]('Batas absen masuk melebihi waktu yang ditentukan')
+        //         }
+        //     });
+        // }
+
+        $(document).ready(function() {
             updateQrLogDB();
 
             setTimeout(() => {
                 $('#html5-qrcode-button-camera-stop').prop('hidden', true)
             }, 1500);
+
             function onScanSuccess(decodedText, decodedResult) {
                 console.log(decodedText)
                 // handle the scanned code as you like, for example:
-                $.get("/staff/absensi/store/" + decodedText, function (data) {
-                    if(data.status == 200) {
+                $.get("/staff/absensi/store/" + decodedText, function(data) {
+                    if (data.status == 200) {
                         $('.card-footer').empty();
-                        $('.card-footer').append('<h4 class="text-white">'+ data.message +'</h4>')
+                        $('.card-footer').append('<h4 class="text-white">' + data.message + '</h4>')
                         $('.card-footer').prop('hidden', false)
                     } else {
+                        toastr.options = {
+                            "closeButton": false,
+                            "debug": false,
+                            "newestOnTop": false,
+                            "progressBar": false,
+                            "positionClass": "toast-top-right",
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "5000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
                         toastr["error"](data.message)
                     }
                 });
             }
 
-            let config = {
-                fps: 10,
-                qrbox: {
-                    width: 600,
-                    height: 600
+            // FORMAT TIME
+            var formattedTime = new Intl.DateTimeFormat('en-US', {
+                timeStyle: 'medium',
+                hour12: false
+            }).format(new Date());
+
+            var data = {
+                jam_masuk: {
+                    batas_awal: "16:00",
+                    batas_akhir: "17:00:00"
                 },
-                rememberLastUsedCamera: true,
-                // Only support camera scan type.
-                supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+                jam_keluar: {
+                    batas_awal: "20:00",
+                    batas_akhir: "22:59:59"
+                }
             };
 
-            let html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", config, /* verbose= */ false);
-            html5QrcodeScanner.render(onScanSuccess);
-        });
+            if (formattedTime > "{{$jamMasuk_akhir}}" && formattedTime < "{{$jamKeluar_awal}}") {
+                $('.card-header').empty()
+                $('.card-header').removeClass('bg-primary')
+                $('.card-header').addClass('bg-danger')
+                $('.card-header').append('<h3 class="text-center text-white">Belum waktu untuk melakukan absensi</h3>')
+                toastr["warning"]('Batas absen masuk melebihi waktu yang ditentukan')
+            } else if (formattedTime <= "{{$jamMasuk_akhir}}" || formattedTime >= "{{$jamMasuk_awal}}") {
+                $('.card-header').empty()
+                $('.card-header').addClass('bg-primary')
+                $('.card-header').removeClass('bg-danger')
+                $('.card-header').append('<h3 class="text-center text-white">Belum waktu untuk melakukan absensi</h3>')
+                // ABSENSI
+                let config = {
+                    fps: 10,
+                    qrbox: {
+                        width: 600,
+                        height: 600
+                    },
+                    rememberLastUsedCamera: true,
+                    // Only support camera scan type.
+                    supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+                };
 
+                let html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader", config, /* verbose= */ false);
+                html5QrcodeScanner.render(onScanSuccess);
+            }
+
+
+
+            // setInterval(() => {
+            //     configDB()
+            // }, 5000);
+        });
     </script>
 </body>
 

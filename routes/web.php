@@ -7,6 +7,7 @@ Route::namespace('Main')->middleware('auth')->group(function () {
     Route::get('/', 'DashboardController@index')->name('dashboard');
     Route::get('/absensi-pegawai', 'DashboardController@absensi')->name('absensi');
     Route::get('/update/log-qr', 'DashboardController@updateLogQr')->name('update.log');
+    Route::get('/config/database', 'DashboardController@configDB')->name('config.database');
     Route::controller(DashboardController::class)->as('dashboard.')->prefix('dashboard')->group(function () {
         Route::get('/', 'index')->name('index');
     });
@@ -23,12 +24,31 @@ Route::namespace('Main')->middleware('auth')->group(function () {
             Route::delete('/delete/{id}', 'delete')->name('delete');
         });
 
+    Route::controller(ConfigController::class)
+        ->as('config.')
+        ->prefix('config')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::get('/create', 'create')->name('create');
+            Route::get('/edit/{id}', 'edit')->name('edit');
+            Route::post('/store', 'store')->name('store');
+            Route::post('/update', 'update')->name('update');
+            Route::delete('/delete/{id}', 'delete')->name('delete');
+        });
+
     Route::controller(AbsensiController::class)
         ->as('absensi.')
         ->prefix('absensi')
         ->group(function () {
-            Route::get('/all', 'all')->name('all');
-            Route::get('/by-name', 'byName')->name('by-name');
+            Route::prefix('all')->as('all.')->group(function() {
+                Route::get('/', 'index')->name('index');
+                Route::post('/filter', 'filter')->name('filter');
+            });
+
+            Route::prefix('by-name')->as('by-name.')->group(function() {
+                Route::get('/', 'index')->name('index');
+                Route::post('/filter', 'filter')->name('filter');
+            });
         });
 });
 

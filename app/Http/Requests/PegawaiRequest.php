@@ -33,12 +33,12 @@ class PegawaiRequest extends FormRequest
             'status_perkawinan' => 'required',
             'pendidikan_terakhir' => 'required',
             'alamat' => 'required',
-            'telp' => 'required|numeric',
+            'telp' => 'required|numeric|unique:pegawai,telp,'. $this->id,
         ];
 
         if (!Request::instance()->has('id')) {
             $rules += [
-                'email' => 'required',
+                'email' => 'required|unique:pegawai,telp,'. $this->id,
                 // 'password' => 'required',
                 'status' => 'nullable',
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'

@@ -15,34 +15,20 @@
                 </a>
                 <div class="triangle"></div>
             </li>
-            <li class="nav-item {{ Request::is('absensi/all') ? 'active' : (Request::is('retensi/by-name') ? 'active' : '') }}" data-item="absensi">
+            <li class="nav-item {{ Request::is('absensi/all') ? 'active' : (Request::is('absensi/by-name') ? 'active' : '') }}" data-item="absensi">
                 <a class="nav-item-hold" href="javascript:void(0)">
                     <i class="nav-icon i-Hospital"></i>
                     <span class="nav-text">Absensi</span>
                 </a>
                 <div class="triangle"></div>
             </li>
-            {{-- <li class="nav-item {{ Str::contains(request()->url(), 'medicine') ? 'active' : '' }}">
-                <a class="nav-item-hold" href="{{ route('medicine.index') }}">
-                    <i class="nav-icon i-Medicine-2"></i>
-                    <span class="nav-text">Medicine</span>
+            <li class="nav-item {{ Str::contains(request()->url(), 'config') ? 'active' : '' }}">
+                <a class="nav-item-hold" href="{{ route('config.index') }}">
+                    <i class="nav-icon i-Gear"></i>
+                    <span class="nav-text">Config</span>
                 </a>
                 <div class="triangle"></div>
-            </li> --}}
-            {{-- <li class="nav-item {{ Str::contains(request()->url(), 'batch') ? 'active' : '' }}">
-                <a class="nav-item-hold" href="{{ route('batch.index') }}">
-                    <i class="nav-icon i-Bar-Chart-3"></i>
-                    <span class="nav-text">Batch</span>
-                </a>
-                <div class="triangle"></div>
-            </li> --}}
-            {{-- <li class="nav-item {{ Str::contains(request()->url(), 'outgoing') ? 'active' : '' }}">
-                <a class="nav-item-hold" href="{{route('outgoing.index')}}">
-                    <i class="nav-icon i-Medicine-3"></i>
-                    <span class="nav-text">Outgoing</span>
-                </a>
-                <div class="triangle"></div>
-            </li> --}}
+            </li>
         </div>
     </div>
 
@@ -50,13 +36,13 @@
         <!-- Submenu Dashboards -->
         <ul class="childNav" data-parent="absensi" style="display: block;">
             <li class="nav-item">
-                <a class="{{ Request::is('absensi/all') ? 'open' : ''}}" href="{{route('absensi.all')}}">
+                <a class="{{ Request::is('absensi/all') ? 'open' : ''}}" href="{{route('absensi.all.index')}}">
                     <i class="nav-icon i-Clock-3"></i>
                     <span class="item-name">Rekap Semua</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="{{ Request::is('absensi/by-name') ? 'open' : ''}}" href="{{route('absensi.by-name')}}">
+                <a class="{{ Request::is('absensi/by-name') ? 'open' : ''}}" href="{{route('absensi.by-name.index')}}">
                     <i class="nav-icon i-Clock-4"></i>
                     <span class="item-name">Rekap by Nama</span>
                 </a>

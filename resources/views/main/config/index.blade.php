@@ -1,6 +1,6 @@
 @extends('template.master')
 
-@section('page-title', 'Pegawai')
+@section('page-title', 'Config')
 @section('page-sub-title', 'Data')
 
 
@@ -11,23 +11,17 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-6">
-                            Data Pegawai
+                            Data Config
                         </div>
                         <div class="col-6 d-flex align-items-center">
                             <div class="m-auto"></div>
-                            @can('admin')
-                                <a href="{{ route('pegawai.create') }}">
+                            {{-- @can('admin')
+                                <a href="{{ route('config.create') }}">
                                     <button type="button" class="btn btn-outline-primary">
                                         <i class="nav-icon fa fa-plus font-weight-bold"></i> Tambah
                                     </button>
                                 </a>
-                            @endcan
-
-                            {{-- <a href="{{route('pegawai.print')}}">
-                                <button type="button" class="btn btn-outline-success btn-print ml-2">
-                                    <i class="nav-icon fa fa-print font-weight-bold"></i> Print
-                                </button>
-                            </a> --}}
+                            @endcan --}}
                         </div>
                     </div>
                 </div>
@@ -35,53 +29,52 @@
                     <table class="table table-hover table-striped" id="tableData">
                         <thead>
                             <th>No</th>
-                            <th></th>
-                            <th>NIP</th>
                             <th>Nama</th>
-                            <th>Jenis Kelamin</th>
-                            <th>Pendidikan Terakhir</th>
-                            <th>No. telp</th>
-                            <th>Alamat</th>
-                            <th>Status</th>
+                            <th>Config</th>
                             <th>Aksi</th>
                         </thead>
                         <tbody>
-                            @foreach ($pegawai as $pegawai)
+                            @foreach ($config as $config)
+                            @php
+                                $json = json_decode($config->json_data, true);
+                            @endphp
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $config->nama }}</td>
                                     <td>
-                                        <img src="{{asset($pegawai->user->foto)}}" width="150px">
-                                    </td>
-                                    <td>{{ $pegawai->nip }}</td>
-                                    <td>{{ $pegawai->nama }}</td>
-                                    <td>{{ $pegawai->jenis_kelamin }}</td>
-                                    <td>{{ $pegawai->pendidikan_terakhir }}</td>
-                                    <td>{{ $pegawai->telp }}</td>
-                                    <td>{{ $pegawai->alamat }}</td>
-                                    <td>
-                                        <span
-                                            class="badge {{ $pegawai->is_active == true ? 'badge-primary' : 'badge-danger' }}">{{ $pegawai->is_active == true ? 'Aktif' : 'Tidak aktif' }}</span>
+                                        <ol>
+                                            <li>Jam Masuk</li>
+                                            <ul>
+                                                <li>Batas Awal : {{$json['jam_masuk']['batas_awal']}}</li>
+                                                <li>Batas Akhir : {{$json['jam_masuk']['batas_akhir']}}</li>
+                                            </ul>
+                                            <li>Jam Keluar</li>
+                                            <ul>
+                                                <li>Batas Awal : {{$json['jam_keluar']['batas_awal']}}</li>
+                                                <li>Batas Akhir : {{$json['jam_keluar']['batas_akhir']}}</li>
+                                            </ul>
+                                        </ol>
                                     </td>
                                     <td>
                                         <div class="row">
                                             <div class="col-2 text-right">
-                                                <a href="{{ route('pegawai.edit', $pegawai->id) }}">
+                                                <a href="{{ route('config.edit', $config->id) }}">
                                                     <button class="btn btn-edit btn-primary ml-5">
                                                         <i class="fa fa-pencil text-white mr-2 pointer"></i> Edit
                                                     </button>
                                                 </a>
                                             </div>
-                                            <div class="col-9">
+                                            {{-- <div class="col-9">
                                                 <form method="POST"
-                                                    action="{{ route('pegawai.delete', $pegawai->user_id) }}">
+                                                    action="{{ route('config.delete', $config->id) }}">
                                                     @csrf
                                                     <input name="_method" type="hidden" value="DELETE">
                                                     <button class="btn btn-delete btn-danger"
-                                                        data-id="{{ $pegawai->user_id }}">
+                                                        data-id="{{ $config->id }}">
                                                         <i class="fa fa-trash-alt text-white mr-2 pointer"></i> Hapus
                                                     </button>
                                                 </form>
-                                            </div>
+                                            </div> --}}
                                         </div>
                                     </td>
                                 </tr>
@@ -143,24 +136,6 @@
                     cell.innerHTML = i + 1;
                 });
             }).draw();
-
-            $("body").on("click", ".btn-delete", function(event) {
-                var form = $(this).closest("form");
-                event.preventDefault();
-                Swal.fire({
-                    title: "Delete this item?",
-                    text: "Data will be deleted",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, deleted!",
-                }).then((result) => {
-                    if (result.value) {
-                        form.submit();
-                    }
-                });
-            });
         });
     </script>
 @endpush

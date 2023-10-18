@@ -15,8 +15,6 @@ class PegawaiController extends Controller
 {
     public function index()
     {
-        // $user = User::latest()->first();
-        // dd($user->pegawai->id);
         $pegawai = Pegawai::all();
 
         return view('main.pegawai.index', compact('pegawai'));
@@ -84,7 +82,11 @@ class PegawaiController extends Controller
                 'id' => 1,
                 'tanggal' => date('Y-m-d'),
                 'qr_code' => $qrCode,
-                'status' => false
+                // 'status' => false
+
+                // new update
+                'status_masuk' => false,
+                'status_keluar' => false
             ];
 
             $dataQr = [
