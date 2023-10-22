@@ -11,10 +11,10 @@ class AbsensiController extends Controller
 {
     public function index()
     {
+        $pegawai = Pegawai::with('absensi')->get();
+
         $firstOfDate = Carbon::now()->startOfMonth();
         $lastOfDate = Carbon::now()->endOfMonth();
-
-        $pegawai = Pegawai::with('absensi')->get();
 
         $fromDate = Carbon::parse($firstOfDate);
         $toDate = Carbon::parse($lastOfDate);
@@ -35,11 +35,13 @@ class AbsensiController extends Controller
             'pegawai' => $pegawai,
             'firstOfDate' => $firstOfDate,
             'lastOfDate' => $lastOfDate,
+            'kategori' => 'Masuk'
         ]);
     }
 
     public function filter(Request $request)
     {
+        $kategori = $request->kategori;
         $pegawai = Pegawai::with('absensi')->get();
 
         $fromDate = Carbon::parse($request->fromDate);
@@ -62,14 +64,59 @@ class AbsensiController extends Controller
                 'pegawai' => $pegawai,
                 'fromDate' => $fromDate,
                 'toDate' => $toDate,
+                'kategori' => $kategori,
             ])-> render()
         ];
 
         return response()->json($data);
     }
 
-    public function byName()
+    public function byNameIndex()
     {
-        return view('main.absensi.by-name');
+        $pegawai = Pegawai::pluck('nama', 'id')->toArray();
+        $firstOfDate = Carbon::now()->startOfMonth();
+        $lastOfDate = Carbon::now()->endOfMonth();
+
+        $dates = [];
+        $dateFormatted = [];
+
+        for ($date = $firstOfDate; $date->lte($lastOfDate); $date->addDay()) {
+            $formattedDate = '<span style="font-size: smaller;"><sup>' . $date->day . '</sup>/<sub>' . $date->month . '</sub>/<small>' . $date->year . '</small></span>';
+            $dateFormatted[] = $formattedDate;
+            $dates[] = $date->toDateString();
+        }
+
+        return view('main.absensi.by-name.index', compact('pegawai', 'dates', 'dateFormatted'));
+    }
+
+    public function byNameFilter(Request $request)
+    {
+        $kategori = $request->kategori;
+        $pegawai = Pegawai::with('absensi')->where('id', $request->pegawaiID)->first();
+
+        $fromDate = Carbon::parse($request->fromDate);
+        $toDate = Carbon::parse($request->toDate);
+
+
+        $dates = [];
+        $dateFormatted = [];
+
+        for ($date = $fromDate; $date->lte($toDate); $date->addDay()) {
+            $formattedDate = '<span style="font-size: smaller;"><sup>' . $date->day . '</sup>/<sub>' . $date->month . '</sub>/<small>' . $date->year . '</small></span>';
+            $dateFormatted[] = $formattedDate;
+            $dates[] = $date->toDateString();
+        }
+
+        $data = [
+            'data' => view('main.absensi.by-name.render')->with([
+                'dateFormatted' => $dateFormatted,
+                'dates' => $dates,
+                'pegawai' => $pegawai,
+                'fromDate' => $fromDate,
+                'toDate' => $toDate,
+            ])-> render()
+        ];
+
+        return response()->json($data);
     }
 }

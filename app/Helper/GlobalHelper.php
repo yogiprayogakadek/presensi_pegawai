@@ -1,5 +1,6 @@
 <?php
 
+
     function searchData($array, $search, $value) {
         $jsonArray = json_decode($array, true);
 
@@ -13,4 +14,12 @@
         }
 
         return $foundData;
+    }
+
+    function username($role) {
+        if($role === 'admin') {
+            return auth()->user()->admin->nama;
+        } else {
+            return auth()->user()->pegawai->nama;
+        }
     }

@@ -19,15 +19,22 @@
                         <div class="col-7">
                             {{-- <div class="m-auto"></div> --}}
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-3">
                                     <span>Dari Tanggal</span>
                                     <input type="date" name="from_date" id="from_date" class="form-control"
                                         value="{{ date('Y-m-01') }}">
                                 </div>
-                                <div class="col-4">
+                                <div class="col-3">
                                     <span>Sampai tanggal</span>
                                     <input type="date" name="to_date" id="to_date" class="form-control"
                                         value="{{ date('Y-m-t') }}">
+                                </div>
+                                <div class="col-2">
+                                    <span>Kategori</span>
+                                    <select name="kategori" id="kategori" class="form-control">
+                                        <option value="Masuk">Masuk</option>
+                                        <option value="Keluar">Keluar</option>
+                                    </select>
                                 </div>
                                 <div class="col-2">
                                     <br>
@@ -56,7 +63,7 @@
                             <tr class="text-center">
                                 <th rowspan="2">No</th>
                                 <th rowspan="2">Nama</th>
-                                <th colspan="{{ count($dates) }}">Tanggal (Absensi 1 bulan terakhir)</th>
+                                <th colspan="{{ count($dates) }}">Tanggal (Absensi Masuk 1 bulan terakhir)</th>
                             </tr>
                             <tr>
                                 @foreach ($dateFormatted as $df)
@@ -74,13 +81,39 @@
                                     <td>{{ $pegawai->nama }}</td>
                                     @for ($i = 0; $i < count($dates); $i++)
                                         <td class="text-center">
-                                            @if (in_array($dates[$i], $pegawai->absensi->pluck('tanggal')->toArray()))
-                                                <i class="fa fa-check"></i>
+                                            @php
+                                                $absensiRecord = $pegawai->getAbsensiRecordForDate($dates[$i]);
+                                            @endphp
+
+                                            @if ($absensiRecord)
+                                                @if (
+                                                    ($kategori == 'Masuk' && $absensiRecord->jam_masuk !== null) ||
+                                                        ($kategori == 'Keluar' && $absensiRecord->jam_keluar !== null))
+                                                    <div class="jam">
+                                                        <i style="cursor: pointer;" class="fa fa-check btn-detail"
+                                                            data-absensi="{{ $absensiRecord }}" data-kategori="{{$kategori}}"></i>
+                                                    </div>
+                                                @else
+                                                    <i class="fa fa-times" style="color: red;"></i>
+                                                @endif
                                             @else
                                                 <i class="fa fa-times" style="color: red;"></i>
                                             @endif
                                         </td>
                                     @endfor
+
+                                    {{-- @for ($i = 0; $i < count($dates); $i++)
+                                        <td class="text-center">
+                                            @if (in_array($dates[$i], $pegawai->absensi->pluck('tanggal')->toArray()))
+                                                <div class="{{$kategori == 'Masuk' ? 'masuk' : 'keluar'}}">
+                                                    <i style="cursor: pointer;" class="fa fa-check btn-detail"
+                                                        data-absensi="{{ $pegawai->absensi }}"></i>
+                                                </div>
+                                            @else
+                                                <i class="fa fa-times" style="color: red;"></i>
+                                            @endif
+                                        </td>
+                                    @endfor --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -112,6 +145,7 @@
 
                 let fromDate = $('#from_date').val();
                 let toDate = $('#to_date').val();
+                let kategori = $('select[name=kategori] option').filter(':selected').val()
 
                 if (!isNaN(new Date(fromDate)) && !isNaN(new Date(toDate))) {
                     var intervalInMilliseconds = Math.abs(new Date(toDate) - new Date(fromDate));
@@ -123,7 +157,8 @@
                             url: "/absensi/all/filter",
                             data: {
                                 fromDate: fromDate,
-                                toDate: toDate
+                                toDate: toDate,
+                                kategori: kategori
                             },
                             dataType: "JSON",
                             success: function(response) {
@@ -159,6 +194,23 @@
                 $('#to_date').attr('min', fromDate);
                 $('#to_date').prop('disabled', false);
             });
+
+            $('body').on('click', '.btn-detail', function() {
+                let absensi = $(this).data('absensi');
+                let kategori = $(this).data('kategori')
+                let jam = kategori == 'Masuk' ? absensi.jam_masuk : absensi.jam_keluar;
+
+                let divJam = '<div class="btn-jam" style="cursor: pointer">' + jam + '</div>';
+
+                $('.jam').append(divJam);
+                $('.btn-detail').prop('hidden', true);
+            });
+
+            $('body').on('click', '.btn-jam', function() {
+                $('.btn-detail').prop('hidden', false);
+                $('.btn-jam').prop('hidden', true);
+            });
+
         });
     </script>
 @endpush

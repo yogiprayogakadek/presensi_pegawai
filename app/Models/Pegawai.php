@@ -34,4 +34,9 @@ class Pegawai extends Model
     {
         return $this->hasMany(Absensi::class, 'pegawai_id', 'id');
     }
+
+    public function getAbsensiRecordForDate($date)
+    {
+        return $this->absensi()->where('tanggal', $date)->first();
+    }
 }

@@ -19,7 +19,7 @@
         <!-- User avatar dropdown -->
         <div class="dropdown">
             <div class="user col align-self-end">
-                Welcome, <strong>{{auth()->user()->role}}</strong>!
+                Welcome, <strong>{{username(auth()->user()->role)}}</strong>!
                 <img src="{{asset(auth()->user()->foto)}}" id="userDropdown" alt="" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false" />
 
@@ -27,8 +27,10 @@
                     <div class="dropdown-header">
                         <i class="i-Lock-User mr-1"></i> {{auth()->user()->role}}
                     </div>
-                    {{-- <a class="dropdown-item">Account settings</a>
-                    <a class="dropdown-item">Billing history</a> --}}
+                    @can('pegawai')
+                    <a class="dropdown-item" href="{{route('staff.profil.index')}}">Profil</a>
+                    @endcan
+                    {{-- <a class="dropdown-item">Billing history</a> --}}
                     <a class="dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" href="{{route('logout')}}">Sign
                         out</a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

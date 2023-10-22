@@ -46,8 +46,8 @@ Route::namespace('Main')->middleware('auth')->group(function () {
             });
 
             Route::prefix('by-name')->as('by-name.')->group(function() {
-                Route::get('/', 'index')->name('index');
-                Route::post('/filter', 'filter')->name('filter');
+                Route::get('/', 'byNameIndex')->name('index');
+                Route::post('/filter', 'byNamefilter')->name('filter');
             });
         });
 });
@@ -60,7 +60,18 @@ Route::namespace('Pegawai')->as('staff.')->prefix('/staff')->middleware('auth')-
         ->as('absensi.')
         ->prefix('absensi')
         ->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/filter', 'filter')->name('filter');
             Route::get('/store/{qr_code}', 'store')->name('store');
+        });
+
+        Route::controller(ProfilController::class)
+        ->prefix('/profil')
+        ->as('profil.')
+        ->group(function() {
+            Route::get('/', 'index')->name('index');
+            Route::post('/update', 'update')->name('update');
+            Route::post('/update-password', 'updatePassword')->name('update.password');
         });
 });
 

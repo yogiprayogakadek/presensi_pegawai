@@ -34,7 +34,7 @@ class User extends Authenticatable
 
     public function admin()
     {
-        return $this->belongsTo(Admin::class, 'user_id', 'id');
+        return $this->hasOne(Admin::class, 'user_id', 'id');
     }
 
     private function roles()

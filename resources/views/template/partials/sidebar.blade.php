@@ -8,6 +8,7 @@
                 </a>
                 <div class="triangle"></div>
             </li>
+            @can('admin')
             <li class="nav-item {{ Str::contains(request()->url(), 'pegawai') ? 'active' : '' }}">
                 <a class="nav-item-hold" href="{{ route('pegawai.index') }}">
                     <i class="nav-icon i-Administrator"></i>
@@ -29,9 +30,21 @@
                 </a>
                 <div class="triangle"></div>
             </li>
+            @endcan
+
+            @can('pegawai')
+            <li class="nav-item {{ Request::is('staff/absensi') ? 'active' : '' }}">
+                <a class="nav-item-hold" href="{{ route('staff.absensi.index') }}">
+                    <i class="nav-icon i-Hospital"></i>
+                    <span class="nav-text">Absensi</span>
+                </a>
+                <div class="triangle"></div>
+            </li>
+            @endcan
         </div>
     </div>
 
+    @can('admin')
     <div class="sidebar-left-secondary rtl-ps-none ps" data-perfect-scrollbar="" data-suppress-scroll-x="true">
         <!-- Submenu Dashboards -->
         <ul class="childNav" data-parent="absensi" style="display: block;">
@@ -56,6 +69,7 @@
             <div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
         </div>
     </div>
+    @endcan
 
     <div class="sidebar-overlay"></div>
 </div>
