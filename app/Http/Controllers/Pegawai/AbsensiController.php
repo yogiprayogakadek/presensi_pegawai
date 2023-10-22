@@ -75,36 +75,29 @@ class AbsensiController extends Controller
                                 ->where('tanggal', date('Y-m-d'))->first();
 
             if(!$absensi) {
-                // Absensi::create([
-                //     'pegawai_id' => $pegawai->id,
-                //     'jam_masuk' => date('H:i:s'),
-                //     'tanggal' => date('Y-m-d')
-                // ]);
+                if($currentTime < $configData['jam_keluar']['batas_akhir']) {
+                    // NEW UPDATE
+                    if($jsonData[count($jsonData)-1]['status_masuk'] === false) {
+                        $jsonData[count($jsonData)-1]['status_masuk'] = true;
+                        $logQr->json_data = json_encode($jsonData, JSON_PRETTY_PRINT);
+                        $logQr->save();
+                    }
+                    Absensi::create([
+                        'pegawai_id' => $pegawai->id,
+                        'jam_masuk' => date('H:i:s'),
+                        'tanggal' => date('Y-m-d')
+                    ]);
 
-                // update status pada log qr code
-                // if($jsonData[count($jsonData)-1]['status'] === false) {
-                //     $jsonData[count($jsonData)-1]['status'] = true;
-                //     $logQr->json_data = json_encode($jsonData, JSON_PRETTY_PRINT);
-                //     $logQr->save();
-                // }
-
-                // NEW UPDATE
-
-                if($jsonData[count($jsonData)-1]['status_masuk'] === false) {
-                    $jsonData[count($jsonData)-1]['status_masuk'] = true;
-                    $logQr->json_data = json_encode($jsonData, JSON_PRETTY_PRINT);
-                    $logQr->save();
+                    return response()->json([
+                        'status' => 200,
+                        'message' => "Hai, selamat pagi " . $pegawai->nama . "! Absensimu berhasil disimpan",
+                    ]);
+                } else {
+                    return response()->json([
+                        'status' => 403,
+                        'message' => "Maaf, waktu absensi telah habis"
+                    ], 403);
                 }
-                Absensi::create([
-                    'pegawai_id' => $pegawai->id,
-                    'jam_masuk' => date('H:i:s'),
-                    'tanggal' => date('Y-m-d')
-                ]);
-
-                return response()->json([
-                    'status' => 200,
-                    'message' => "Hai, selamat pagi " . $pegawai->nama . "! Absensimu berhasil disimpan",
-                ]);
             } else {
 
                 // if($configData['jam_masuk']['batas_awal'] < $currentTime || $currentTime < $configData['jam_keluar']['batas_awal']) {
@@ -179,5 +172,27 @@ class AbsensiController extends Controller
                 'message' => 'QR Code expired'
             ]);
         }
+    }
+
+    public function print(Request $request)
+    {
+        $pegawai = Pegawai::with('absensi')->where('id', auth()->user()->pegawai->id)->first();
+
+        $fromDate = Carbon::parse($request->from_date);
+        $toDate = Carbon::parse($request->to_date);
+
+        $dates = [];
+        $dateFormatted = [];
+
+        for ($date = $fromDate; $date->lte($toDate); $date->addDay()) {
+            $formattedDate = '<span style="font-size: smaller;"><sup>' . $date->day . '</sup>/<sub>' . $date->month . '</sub>/<small>' . $date->year . '</small></span>';
+            $dateFormatted[] = $formattedDate;
+            $dates[] = $date->toDateString();
+        }
+
+
+        $pdf = \PDF::loadview('pegawai.absensi.print', compact('dateFormatted', 'dates', 'pegawai', 'fromDate', 'toDate'));
+        $pdf->setPaper('a3', 'landscape');
+        return $pdf->download('Absensi - ' . time() . '.pdf');
     }
 }

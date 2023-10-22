@@ -21,7 +21,7 @@ class ConfigSeeder extends Seeder
             ],
             'jam_keluar' => [
                 'batas_awal' => Carbon::today()->setHour(16)->setMinute(0)->setSecond(0)->format('H:i:s'),
-                'batas_akhir' => Carbon::today()->setHour(23)->setMinute(59)->setSecond(59)->format('H:i:s'),
+                'batas_akhir' => Carbon::today()->setHour(23)->setMinute(59)->setSecond(0)->format('H:i:s'),
             ]
         ];
 

@@ -64,26 +64,25 @@
                                     </td>
                                     <td>
                                         <div class="row">
-                                            <div class="col-2 text-right">
+                                            <div class="col-6 text-center mb-2">
                                                 <a href="{{ route('pegawai.edit', $pegawai->id) }}">
-                                                    <button class="btn btn-edit btn-primary ml-5">
+                                                    <button class="btn btn-edit btn-primary">
                                                         <i class="fa fa-pencil text-white mr-2 pointer"></i> Edit
                                                     </button>
                                                 </a>
                                             </div>
-                                            <div class="col-9">
-                                                <form method="POST"
-                                                    action="{{ route('pegawai.delete', $pegawai->user_id) }}">
+                                            <div class="col-6 text-center">
+                                                <form method="POST" action="{{ route('pegawai.delete', $pegawai->user_id) }}">
                                                     @csrf
                                                     <input name="_method" type="hidden" value="DELETE">
-                                                    <button class="btn btn-delete btn-danger"
-                                                        data-id="{{ $pegawai->user_id }}">
+                                                    <button class="btn btn-delete btn-danger" data-id="{{ $pegawai->user_id }}">
                                                         <i class="fa fa-trash-alt text-white mr-2 pointer"></i> Hapus
                                                     </button>
                                                 </form>
                                             </div>
                                         </div>
                                     </td>
+
                                 </tr>
                             @endforeach
                         </tbody>

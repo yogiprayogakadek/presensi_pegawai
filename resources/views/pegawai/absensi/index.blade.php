@@ -22,9 +22,6 @@
                             <button type="button" class="btn btn-outline-success btn-filter">
                                 <i class="nav-icon fa fa-search font-weight-bold"></i> Filter
                             </button>
-                            <button class="btn btn-outline-primary btn-print ml-2">
-                                <i class="fa fa-print"></i> Print
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -93,24 +90,27 @@
                         <i class="fa fa-times-circle"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="form-group">
-                            <label for="from_date">Dari tanggal</label>
-                            <input type="date" name="from_date" id="from_date" class="form-control"
-                                value="{{ date('Y-m-01') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="from_date">Sampai tanggal</label>
-                            <input type="date" name="to_date" id="to_date" class="form-control"
-                                value="{{ date('Y-m-t') }}">
+                <form action="{{ route('staff.absensi.print') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="from_date">Dari tanggal</label>
+                                <input type="date" name="from_date" id="from_date" class="form-control"
+                                    value="{{ date('Y-m-01') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="from_date">Sampai tanggal</label>
+                                <input type="date" name="to_date" id="to_date" class="form-control"
+                                    value="{{ date('Y-m-t') }}">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary btn-search">Search</button>
-                </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-primary btn-print" type="submit">Print</button>
+                        <button type="button" class="btn btn-primary btn-search">Search</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

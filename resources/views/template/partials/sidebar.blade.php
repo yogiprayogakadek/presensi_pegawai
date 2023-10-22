@@ -18,7 +18,7 @@
             </li>
             <li class="nav-item {{ Request::is('absensi/all') ? 'active' : (Request::is('absensi/by-name') ? 'active' : '') }}" data-item="absensi">
                 <a class="nav-item-hold" href="javascript:void(0)">
-                    <i class="nav-icon i-Hospital"></i>
+                    <i class="nav-icon i-Thread"></i>
                     <span class="nav-text">Absensi</span>
                 </a>
                 <div class="triangle"></div>
@@ -35,7 +35,7 @@
             @can('pegawai')
             <li class="nav-item {{ Request::is('staff/absensi') ? 'active' : '' }}">
                 <a class="nav-item-hold" href="{{ route('staff.absensi.index') }}">
-                    <i class="nav-icon i-Hospital"></i>
+                    <i class="nav-icon i-Thread"></i>
                     <span class="nav-text">Absensi</span>
                 </a>
                 <div class="triangle"></div>

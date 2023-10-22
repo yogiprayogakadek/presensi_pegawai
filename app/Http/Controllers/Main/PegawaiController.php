@@ -149,6 +149,10 @@ class PegawaiController extends Controller
                 ]);
             }
 
+            $user->update([
+                'is_active' => $request->status
+            ]);
+
             // kemudian save ke table pegawai
             $user->pegawai->update([
                 'nip' => $request->nip,

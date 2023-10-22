@@ -140,22 +140,18 @@
             </div>
         </div>
 
-        {{-- <div class="col-8 div-password" hidden>
+        <div class="col-8 div-password" hidden>
             <div class="card">
                 <div class="card-header">
                     <div class="card-title">
-                        <h4>Update Profil</h4>
+                        <h4>Update Password</h4>
                     </div>
                 </div>
                 <form action="{{ route('staff.profil.update.password') }}" method="POST" id="form2">
                     @csrf
                     <div class="card-body">
-                        <input type="hidden" name="user_id" id="user_id" value="{{ $pegawai->user_id }}"
-                            class="form-control">
-                        <input type="hidden" name="id" id="id" value="{{ $pegawai->id }}"
-                            class="form-control">
-                        <input type="hidden" name="update_password" id="update_password" value="update-password"
-                            class="form-control">
+                        {{-- <input type="hidden" name="update_password" id="update_password" value="update-password"
+                            class="form-control"> --}}
 
                         <div class="form-group">
                             <label for="">Password Sekarang</label>
@@ -181,7 +177,7 @@
                     </div>
                 </form>
             </div>
-        </div> --}}
+        </div>
     </div>
 @endsection
 
@@ -190,6 +186,7 @@
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js') }}"></script>
 
     {!! JsValidator::formRequest('App\Http\Requests\UpdateProfilRequest', '#form') !!}
+    {!! JsValidator::formRequest('App\Http\Requests\UpdatePasswordRequest', '#form2') !!}
     <script>
         $(document).ready(function() {
             @if (session('status'))

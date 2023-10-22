@@ -65,7 +65,7 @@ class AbsensiController extends Controller
                 'fromDate' => $fromDate,
                 'toDate' => $toDate,
                 'kategori' => $kategori,
-            ])-> render()
+            ])->render()
         ];
 
         return response()->json($data);
@@ -114,9 +114,31 @@ class AbsensiController extends Controller
                 'pegawai' => $pegawai,
                 'fromDate' => $fromDate,
                 'toDate' => $toDate,
-            ])-> render()
+            ])->render()
         ];
 
         return response()->json($data);
+    }
+
+    public function print(Request $request)
+    {
+        $pegawai = Pegawai::with('absensi')->where('id', $request->pegawai)->first();
+
+        $fromDate = Carbon::parse($request->from_date);
+        $toDate = Carbon::parse($request->to_date);
+
+        $dates = [];
+        $dateFormatted = [];
+
+        for ($date = $fromDate; $date->lte($toDate); $date->addDay()) {
+            $formattedDate = '<span style="font-size: smaller;"><sup>' . $date->day . '</sup>/<sub>' . $date->month . '</sub>/<small>' . $date->year . '</small></span>';
+            $dateFormatted[] = $formattedDate;
+            $dates[] = $date->toDateString();
+        }
+
+
+        $pdf = \PDF::loadview('main.absensi.by-name.print', compact('dateFormatted', 'dates', 'pegawai', 'fromDate', 'toDate'));
+        $pdf->setPaper('a3', 'landscape');
+        return $pdf->download('Absensi - ' . time() . '.pdf');
     }
 }

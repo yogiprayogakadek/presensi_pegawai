@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Pegawai;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdatePasswordRequest;
+use App\Http\Requests\UpdateProfilRequest;
 use App\Models\Pegawai;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -24,7 +26,7 @@ class ProfilController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(UpdateProfilRequest $request)
     {
         try {
             $user = User::find($request->user_id);
@@ -65,12 +67,13 @@ class ProfilController extends Controller
             return redirect()->back()->with([
                 'status' => 'error',
                 'title' => 'Gagal',
-                'message' => 'Data pegawai gagal diubah.'
+                'message' => $e->getMessage()
+                // 'message' => 'Data pegawai gagal diubah.'
             ]);
         }
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(UpdatePasswordRequest $request)
     {
         try {
             $user = User::where('id', auth()->user()->id)->first();

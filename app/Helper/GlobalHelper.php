@@ -23,3 +23,8 @@
             return auth()->user()->pegawai->nama;
         }
     }
+
+    function role()
+    {
+        return auth()->user()->role;
+    }

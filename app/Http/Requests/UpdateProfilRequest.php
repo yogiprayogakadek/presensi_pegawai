@@ -26,27 +26,24 @@ class UpdateProfilRequest extends FormRequest
     {
         $rules = [
             'nip' => 'required|numeric|unique:pegawai,nip,' . $this->id,
-            'nama' => 'required|unique:pegawai,nama,' . $this->id,
+            'nama' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
             'status_perkawinan' => 'required',
             'pendidikan_terakhir' => 'required',
             'alamat' => 'required',
-            'telp' => 'required|numeric|unique:pegawai,telp,'. $this->id,
+            'telp' => 'required|numeric',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ];
 
-        if (!Request::instance()->has('id')) {
-            $rules += [
-                'email' => 'required|unique:pegawai,telp,'. $this->id,
-                'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
-            ];
-        } else {
-            $rules += [
-                'email' => 'nullable',
-                'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
-            ];
-        }
+        // if (!Request::instance()->has('id')) {
+        //     $rules = [
+        //         'current_password' => 'required|min:8',
+        //         'new_password' => 'required|same:confirm_password|min:8',
+        //         'confirm_password' => 'required|same:new_password|min:8',
+        //     ];
+        // }
 
         return $rules;
     }
@@ -74,7 +71,6 @@ class UpdateProfilRequest extends FormRequest
             'alamat' => 'Alamat',
             'telp' => 'No. telp',
             'email' => 'Email',
-            // 'password' => 'Password',
             'status' => 'Status',
             'foto' => 'Foto',
 

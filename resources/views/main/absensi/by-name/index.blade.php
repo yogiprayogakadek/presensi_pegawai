@@ -22,35 +22,10 @@
                             <button type="button" class="btn btn-outline-success btn-filter">
                                 <i class="nav-icon fa fa-search font-weight-bold"></i> Filter
                             </button>
-                            <button class="btn btn-outline-primary btn-print ml-2">
-                                <i class="fa fa-print"></i> Print
-                            </button>
                         </div>
                     </div>
                 </div>
                 <div class="card-body" id="render">
-                    {{-- <table class="table table-hover table-bordered table-responsive">
-                        <thead>
-                            <tr class="text-center">
-                                <th rowspan="2">No</th>
-                                <th rowspan="2">Nama</th>
-                                <th colspan="{{ count($dates) }}">Tanggal (Absensi Masuk 1 bulan terakhir)</th>
-                            </tr>
-                            <tr>
-                                @foreach ($dateFormatted as $df)
-                                    <td class="text-center">
-                                        {!! $df !!}
-                                    </td>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="text-center" colspan="{{ count($dates) + 2 }}">No Data</td>
-                            </tr>
-                        </tbody>
-                    </table> --}}
-
                     <table class="table table-hover table-bordered">
                         <thead class="text-center">
                             <tr>
@@ -93,32 +68,35 @@
                         <i class="fa fa-times-circle"></i>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="form-group">
-                            <label for="from_date">Dari tanggal</label>
-                            <input type="date" name="from_date" id="from_date" class="form-control"
-                                value="{{ date('Y-m-01') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="from_date">Sampai tanggal</label>
-                            <input type="date" name="to_date" id="to_date" class="form-control"
-                                value="{{ date('Y-m-t') }}">
-                        </div>
-                        <div class="form-group">
-                            <label for="from_date">Pegawai</label>
-                            <select name="pegawai" class="js-example-basic-single">
-                                @foreach ($pegawai as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
+                <form action="{{ route('absensi.by-name.print') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class="form-group">
+                                <label for="from_date">Dari tanggal</label>
+                                <input type="date" name="from_date" id="from_date" class="form-control"
+                                    value="{{ date('Y-m-01') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="from_date">Sampai tanggal</label>
+                                <input type="date" name="to_date" id="to_date" class="form-control"
+                                    value="{{ date('Y-m-t') }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="pegawai">Pegawai</label>
+                                <select name="pegawai" class="js-example-basic-single">
+                                    @foreach ($pegawai as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary btn-search">Search</button>
-                </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-primary btn-print" type="submit">Print</button>
+                        <button type="button" class="btn btn-primary btn-search">Search</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

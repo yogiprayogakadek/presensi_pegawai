@@ -2,8 +2,8 @@
     <thead class="text-center">
         <tr>
             <th class="align-middle" rowspan="2">#</th>
-                                <th class="align-middle" rowspan="2">Tanggal</th>
-                                <th colspan="2">Absensi - {{$pegawai->nama}}</th>
+            <th class="align-middle" rowspan="2">Tanggal</th>
+            <th colspan="2">Absensi - {{ $pegawai->nama }}</th>
         </tr>
         <tr>
             <th>Jam Masuk</th>
@@ -50,8 +50,8 @@
                         @endif
                     </td>
                 @empty
-                <td class="text-center">-</td>
-                <td class="text-center">-</td>
+                    <td class="text-center">-</td>
+                    <td class="text-center">-</td>
                 @endforelse
             </tr>
         @endforeach

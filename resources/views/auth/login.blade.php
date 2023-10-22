@@ -7,7 +7,7 @@
 <head>
 
         <meta charset="utf-8" />
-        <title>SI Inventori - KSR STIKOM BALI | Login</title>
+        <title>Sistem Absensi - KPU Kabupaten Ngada | Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
         <meta content="Themesbrand" name="author" />
@@ -23,7 +23,7 @@
 
         <style>
             body {
-                background-image: url('https://www.stikom-bali.ac.id/id/wp-content/uploads/2021/01/stikom-depan.jpg');
+                background-image: url('https://lh3.googleusercontent.com/-Q82asL_AzpE/YutlUkPHkYI/AAAAAAAAPMo/MbKqkqcHGloeq4fFEWeA-QrlHZKghrEBACNcBGAsYHQ/s1600/pemilu-2024.jpg');
                 background-repeat: no-repeat;
                 background-size: cover;
                 background-position: center;
@@ -42,7 +42,7 @@
                                 <div class="row">
                                     <div class="col-7">
                                         <div class="text-primary p-4">
-                                            <h5 class="text-primary">SI Inventori - KSR STIKOM BALI</h5>
+                                            <h5 class="text-primary">Sistem Absensi - KPU Kabupaten Ngada</h5>
                                             <p>Log in dengan identitas anda</p>
                                         </div>
                                     </div>
