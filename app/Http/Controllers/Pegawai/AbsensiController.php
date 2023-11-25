@@ -108,6 +108,11 @@ class AbsensiController extends Controller
                         'status' => 200,
                         'message' => "Absen keluar berhasil, kamu tidak absen masuk!"
                     ]);
+                } elseif ($currentTime > $configData['jam_masuk']['batas_akhir'] && $currentTime < $configData['jam_keluar']['batas_awal']) {
+                    return response()->json([
+                        'status' => 409,
+                        'message' => "Belum waktunya absen keluar"
+                    ]);
                 } else {
                     return response()->json([
                         'status' => 409,

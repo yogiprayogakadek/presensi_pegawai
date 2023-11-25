@@ -79,7 +79,7 @@ Route::namespace('Pegawai')->as('staff.')->prefix('/staff')->middleware(['auth',
     });
 
 Route::get('/not-found', function () {
-    return view('template.error.notFount');
+    return view('template.error.notFound');
 })->middleware('auth');
 
 Route::get('/inactive', function () {

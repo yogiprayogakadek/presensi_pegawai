@@ -125,19 +125,36 @@
                 }
             };
 
-            if (formattedTime > "{{$jamMasuk_akhir}}" && formattedTime < "{{$jamKeluar_awal}}") {
-                $('.card-header').empty()
-                $('.card-header').removeClass('bg-primary')
-                $('.card-header').addClass('bg-danger')
-                $('.card-header').append('<h3 class="text-center text-white">Belum waktu untuk melakukan absensi</h3>')
-                toastr["warning"]('Batas absen masuk melebihi waktu yang ditentukan')
-            } else if (formattedTime <= "{{$jamMasuk_akhir}}" || formattedTime >= "{{$jamMasuk_awal}}") {
-                $('.card-header').empty()
-                $('.card-header').addClass('bg-primary')
-                $('.card-header').removeClass('bg-danger')
-                $('.card-header').append('<h3 class="text-center text-white">Belum waktu untuk melakukan absensi</h3>')
-                // ABSENSI
-                let config = {
+            // if (formattedTime > "{{$jamMasuk_akhir}}" && formattedTime < "{{$jamKeluar_awal}}") {
+            //     $('.card-header').empty()
+            //     $('.card-header').removeClass('bg-primary')
+            //     $('.card-header').addClass('bg-danger')
+            //     $('.card-header').append('<h3 class="text-center text-white">Belum waktu untuk melakukan absensi</h3>')
+            //     toastr["warning"]('Batas absen masuk melebihi waktu yang ditentukan')
+            // } else if (formattedTime <= "{{$jamMasuk_akhir}}" || formattedTime >= "{{$jamMasuk_awal}}") {
+            //     $('.card-header').empty()
+            //     $('.card-header').addClass('bg-primary')
+            //     $('.card-header').removeClass('bg-danger')
+            //     $('.card-header').append('<h3 class="text-center text-white">Belum waktu untuk melakukan absensi</h3>')
+            //     // ABSENSI
+            //     let config = {
+            //         fps: 10,
+            //         qrbox: {
+            //             width: 600,
+            //             height: 600
+            //         },
+            //         rememberLastUsedCamera: true,
+            //         // Only support camera scan type.
+            //         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA]
+            //     };
+
+            //     let html5QrcodeScanner = new Html5QrcodeScanner(
+            //         "reader", config, /* verbose= */ false);
+            //     html5QrcodeScanner.render(onScanSuccess);
+            // }
+
+
+            let config = {
                     fps: 10,
                     qrbox: {
                         width: 600,
@@ -151,7 +168,6 @@
                 let html5QrcodeScanner = new Html5QrcodeScanner(
                     "reader", config, /* verbose= */ false);
                 html5QrcodeScanner.render(onScanSuccess);
-            }
 
 
 

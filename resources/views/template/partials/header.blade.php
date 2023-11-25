@@ -1,6 +1,6 @@
 <div class="main-header">
     <div class="logo">
-        <a href="/">
+        <a href="{{role() == 'admin' ? '/' : '/staff'}}">
             <img src="{{asset('assets/images/logo.png')}}" alt="" />
         </a>
     </div>
