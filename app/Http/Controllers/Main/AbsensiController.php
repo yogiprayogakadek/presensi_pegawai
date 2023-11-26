@@ -62,7 +62,8 @@ class AbsensiController extends Controller
                 'dateFormatted' => $dateFormatted,
                 'dates' => $dates,
                 'pegawai' => $pegawai,
-                'fromDate' => $fromDate,
+                // 'fromDate' => $fromDate,
+                'fromDate' => \Carbon\Carbon::createFromFormat('Y-m-d', $request->fromDate),
                 'toDate' => $toDate,
                 'kategori' => $kategori,
             ])->render()
