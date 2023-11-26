@@ -23,7 +23,7 @@
     setInterval(() => {
         $('#qrCode').empty();
         qrcode()
-    }, 30000);
+    }, 10000);
 
 </script>
 @endpush
