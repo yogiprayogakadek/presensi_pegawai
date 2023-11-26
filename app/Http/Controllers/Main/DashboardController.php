@@ -67,7 +67,8 @@ class DashboardController extends Controller
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => 200,
-                'message' => 'Data gagal diubah'
+                // 'message' => 'Data gagal diubah'
+                'message' => $th->getMessage()
             ]);
         }
     }

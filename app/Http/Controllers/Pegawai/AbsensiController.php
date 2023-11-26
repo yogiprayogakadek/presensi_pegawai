@@ -70,6 +70,8 @@ class AbsensiController extends Controller
 
         $jsonData = json_decode($logQr->json_data, true);
 
+        // dd($qrCode, $jsonData[count($jsonData)-1]['qr_code']);
+
         if($qrCode === $jsonData[count($jsonData)-1]['qr_code']) {
             $absensi = Absensi::where('pegawai_id', $pegawai->id)
                                 ->where('tanggal', date('Y-m-d'))->first();

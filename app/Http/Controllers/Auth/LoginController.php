@@ -55,7 +55,8 @@ class LoginController extends Controller
                         'id' => count($jsonData) + 1,
                         'tanggal' => date('Y-m-d'),
                         'qr_code' => $user->pegawai->id . '_' . now()->toDateTimeString(),
-                        'status' => false
+                        'status_masuk' => false,
+                        'status_keluar' => false
                     ];
 
                     // Add the new data to the existing JSON data
