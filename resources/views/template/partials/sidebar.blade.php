@@ -4,7 +4,7 @@
             <li class="nav-item {{ Request::is('dashboard') ? 'active' : '' }}">
                 <a class="nav-item-hold" href="{{ route('dashboard.index') }}">
                     <i class="nav-icon i-Bar-Chart"></i>
-                    <span class="nav-text">Dashoard</span>
+                    <span class="nav-text">Dashboard</span>
                 </a>
                 <div class="triangle"></div>
             </li>

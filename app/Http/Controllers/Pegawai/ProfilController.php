@@ -15,7 +15,7 @@ class ProfilController extends Controller
     {
         $pegawai = Pegawai::find(auth()->user()->pegawai->id);
         $statusPerkawinan = ['', 'Belum kawin', 'Kawin', 'Cerai hidup', 'Cerai mati'];
-        $pendidikanTerakhir = ['', 'SD', 'SMP', 'SMA atau sederajat', 'Diploma 1', 'Diploma 2', 'Diploma 3', 'Diploma 4', 'Sarjana (S1)', 'Magister (S2)', 'Doktor (S4)'];
+        $pendidikanTerakhir = ['', 'SD', 'SMP', 'SMA atau sederajat', 'Diploma 1', 'Diploma 2', 'Diploma 3', 'Diploma 4', 'Sarjana (S1)', 'Magister (S2)', 'Doktor (S3)'];
         $jenisKelamin = ['', 'Laki-laki', 'Perempuan'];
 
         return view('pegawai.profil.index')->with([
