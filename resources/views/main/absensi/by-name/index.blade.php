@@ -183,20 +183,29 @@
                 $('#to_date').prop('disabled', false);
             });
 
-            $('body').on('click', '.btn-detail-masuk', function() {
+            $('body').on('click', '.btn-detail', function() {
                 let absensi = $(this).data('absensi');
-                let kategori = $(this).data('kategori')
+                let kategori = $(this).data('kategori');
 
-                let jam = absensi.jam_masuk;
+                let jam;
 
-                let divJam = '<div class="btn-jam-masuk" style="cursor: pointer">' + jam + '</div>';
+                if (kategori === 'masuk') {
+                    jam = absensi.jam_masuk;
+                } else if (kategori === 'keluar') {
+                    jam = absensi.jam_keluar;
+                }
 
-                $('.jam-masuk').append(divJam)
-                $('.btn-detail-masuk').prop('hidden', true);
+                let parentContainer = $(this).closest('td');
+                let divJam = '<div class="btn-jam-' + kategori + '" style="cursor: pointer">' + jam +
+                    '</div>';
+
+                parentContainer.append(divJam);
+                $(this).prop('hidden', true);
             });
 
+
             $('body').on('click', '.btn-jam-masuk', function() {
-                $('.btn-detail-masuk').prop('hidden', false);
+                $('.btn-detail').prop('hidden', false);
                 $('.btn-jam-masuk').prop('hidden', true);
             });
 
@@ -213,7 +222,7 @@
             });
 
             $('body').on('click', '.btn-jam-keluar', function() {
-                $('.btn-detail-keluar').prop('hidden', false);
+                $('.btn-detail').prop('hidden', false);
                 $('.btn-jam-keluar').prop('hidden', true);
             });
 

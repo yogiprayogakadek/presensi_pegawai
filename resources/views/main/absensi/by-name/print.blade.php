@@ -147,7 +147,8 @@
                             <h4 style="margin-top: 5px; margin-bottom: 5px">
                                 Laporan Absensi
                             </h4>
-                            <p>Semoga informasi yang disajikan di sini membantu Anda dalam mengelola kehadiran karyawan dengan lebih efisien.</p>
+                            <p>Semoga informasi yang disajikan di sini membantu Anda dalam mengelola kehadiran karyawan
+                                dengan lebih efisien.</p>
                         </div>
                     </td>
                 </tr>
@@ -212,54 +213,30 @@
                         <td class="text-center">
                             {!! $df !!}
                         </td>
-                        @forelse ($pegawai->absensi as $item)
-                            @php
-                                $absensiRecord = $pegawai->getAbsensiRecordForDate($dates[$key]);
-                            @endphp
-                            <td class="text-center" colspan="6">
-                                @if ($absensiRecord)
-                                    @if ($absensiRecord->jam_masuk !== null)
-                                        <div class="jam-masuk">
-                                            {{ $absensiRecord->jam_masuk }}
-                                        </div>
-                                    @else
-                                        -
-                                    @endif
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td class="text-center" colspan="6">
-                                @if ($absensiRecord)
-                                    @if ($absensiRecord->jam_keluar !== null)
-                                        <div class="jam-keluar">
-                                            {{ $absensiRecord->jam_keluar }}
-                                        </div>
-                                    @else
-                                    -
-                                    @endif
-                                @else
+
+                        @php
+                            $absensiRecord = $pegawai->getAbsensiRecordForDate($dates[$key]);
+                        @endphp
+                        <td class="text-center" colspan="6">
+                            @if ($absensiRecord && $absensiRecord->jam_masuk !== null)
+                            <div class="jam-masuk">
+                                {{ $absensiRecord->jam_masuk }}
+                            </div>
+                            @else
                                 -
-                                @endif
-                            </td>
-                        @empty
-                            <td class="text-center">-</td>
-                            <td class="text-center">-</td>
-                        @endforelse
-                    </tr>
-                @endforeach
-                {{-- @forelse($categories as $category)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td colspan="12">{{ $category->name }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="13" style="text-align: center">
-                            <h3>No data</h3>
+                            @endif
+                        </td>
+                        <td class="text-center" colspan="6">
+                            @if ($absensiRecord && $absensiRecord->jam_keluar !== null)
+                            <div class="jam-keluar">
+                                {{ $absensiRecord->jam_keluar }}
+                            </div>
+                            @else
+                                -
+                            @endif
                         </td>
                     </tr>
-                @endforelse --}}
+                @endforeach
             </tbody>
         </table>
     </section>
