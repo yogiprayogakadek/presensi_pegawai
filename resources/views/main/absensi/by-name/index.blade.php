@@ -200,13 +200,18 @@
                     '</div>';
 
                 parentContainer.append(divJam);
-                $(this).prop('hidden', true);
+                // $(this).prop('hidden', true);
+                parentContainer.find('.btn-detail').hide();
             });
 
 
             $('body').on('click', '.btn-jam-masuk', function() {
-                $('.btn-detail').prop('hidden', false);
-                $('.btn-jam-masuk').prop('hidden', true);
+                // $('.btn-detail').prop('hidden', false);
+                // $('.btn-jam-masuk').prop('hidden', true);
+                let container = $(this).closest('td');
+                container.find('.btn-detail').show();
+                $(this).prop('hidden', true);
+                // container.find('.btn-jam-Masuk').hide();
             });
 
             $('body').on('click', '.btn-detail-keluar', function() {
@@ -215,15 +220,22 @@
 
                 let jam = absensi.jam_keluar;
 
+                let parentContainer = $(this).closest('td');
                 let divJam = '<div class="btn-jam-keluar" style="cursor: pointer">' + jam + '</div>';
 
-                $('.jam-keluar').append(divJam)
-                $('.btn-detail-keluar').prop('hidden', true);
+                // $('.jam-keluar').append(divJam)
+                parentContainer.append(divJam);
+                parentContainer.find('.btn-detail-keluar').hide();
+                // $('.btn-detail-keluar').prop('hidden', true);
             });
 
             $('body').on('click', '.btn-jam-keluar', function() {
-                $('.btn-detail').prop('hidden', false);
-                $('.btn-jam-keluar').prop('hidden', true);
+                // $('.btn-detail').prop('hidden', false);
+                // $('.btn-jam-keluar').prop('hidden', true);
+
+                let container = $(this).closest('td');
+                container.find('.btn-detail-keluar').show();
+                $(this).prop('hidden', true);
             });
 
         });

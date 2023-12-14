@@ -31,7 +31,7 @@
                 </td>
                 <td class="text-center">
                     @if ($absensiRecord && $absensiRecord->jam_keluar !== null)
-                        <div class="btn-detail" data-kategori="keluar" data-absensi="{{ $absensiRecord }}">
+                        <div class="btn-detail-keluar" data-kategori="keluar" data-absensi="{{ $absensiRecord }}">
                             <i style="cursor: pointer;" class="fa fa-check"></i>
                         </div>
                     @else
