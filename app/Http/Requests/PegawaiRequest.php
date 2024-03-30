@@ -25,7 +25,7 @@ class PegawaiRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'nip' => 'required|numeric|unique:pegawai,nip,' . $this->id,
+            // 'nip' => 'required|numeric|unique:pegawai,nip,' . $this->id,
             'nama' => 'required|unique:pegawai,nama,' . $this->id,
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required|date',
@@ -33,12 +33,12 @@ class PegawaiRequest extends FormRequest
             'status_perkawinan' => 'required',
             'pendidikan_terakhir' => 'required',
             'alamat' => 'required',
-            'telp' => 'required|numeric|unique:pegawai,telp,'. $this->id,
+            'telp' => 'required|numeric|unique:pegawai,telp,' . $this->id,
         ];
 
         if (!Request::instance()->has('id')) {
             $rules += [
-                'email' => 'required|unique:pegawai,telp,'. $this->id,
+                'email' => 'required|unique:pegawai,telp,' . $this->id,
                 // 'password' => 'required',
                 'status' => 'nullable',
                 'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
@@ -66,7 +66,7 @@ class PegawaiRequest extends FormRequest
     public function attributes()
     {
         return [
-            'nip' => 'NIP',
+            // 'nip' => 'NIP',
             'nama' => 'Nama',
             'tempat_lahir' => 'Tempat lahir',
             'tanggal_lahir' => 'Tanggal lahir',
@@ -82,4 +82,3 @@ class PegawaiRequest extends FormRequest
         ];
     }
 }
-

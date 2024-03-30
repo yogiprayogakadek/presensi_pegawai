@@ -142,4 +142,28 @@ class AbsensiController extends Controller
         $pdf->setPaper('a3', 'landscape');
         return $pdf->download('Absensi - ' . time() . '.pdf');
     }
+
+    public function printAll(Request $request)
+    {
+        // dd($request->all());
+        $pegawai = Pegawai::with('absensi')->get();
+
+        $fromDate = Carbon::parse($request->from_date);
+        $toDate = Carbon::parse($request->to_date);
+        $kategori = $request->kategori;
+
+        $dates = [];
+        $dateFormatted = [];
+
+        for ($date = $fromDate; $date->lte($toDate); $date->addDay()) {
+            $formattedDate = '<span style="font-size: smaller;"><sup>' . $date->day . '</sup>/<sub>' . $date->month . '</sub>/<small>' . $date->year . '</small></span>';
+            $dateFormatted[] = $formattedDate;
+            $dates[] = $date->toDateString();
+        }
+
+
+        $pdf = \PDF::loadview('main.absensi.all.print', compact('dateFormatted', 'dates', 'pegawai', 'fromDate', 'toDate', 'kategori'));
+        $pdf->setPaper('a2', 'landscape');
+        return $pdf->download('Absensi - ' . time() . '.pdf');
+    }
 }

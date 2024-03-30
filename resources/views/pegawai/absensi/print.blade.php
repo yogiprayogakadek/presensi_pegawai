@@ -108,6 +108,7 @@
         .text-center {
             text-align: center;
         }
+
     </style>
 </head>
 
@@ -121,8 +122,7 @@
             <table style="width: 100%; table-layout: fixed">
                 <tr>
                     <td style="border-left: 1px solid #ddd; border-right: 1px solid #ddd">
-                        <div
-                            style="
+                        <div style="
                   text-align: center;
                   margin: auto;
                   line-height: 1.5;
@@ -136,8 +136,7 @@
                             </p>
                         </div>
                     </td>
-                    <td align="right"
-                        style="
+                    <td align="right" style="
                 text-align: right;
                 padding-left: 50px;
                 line-height: 1.5;
@@ -147,7 +146,8 @@
                             <h4 style="margin-top: 5px; margin-bottom: 5px">
                                 Laporan Absensi
                             </h4>
-                            <p>Semoga informasi yang disajikan di sini membantu Anda dalam mengelola kehadiran karyawan dengan lebih efisien.</p>
+                            <p>Semoga informasi yang disajikan di sini membantu Anda dalam mengelola kehadiran karyawan
+                                dengan lebih efisien.</p>
                         </div>
                     </td>
                 </tr>
@@ -156,8 +156,7 @@
         <table class="table table-bordered h4-14" style="width: 100%; -fs-table-paginate: paginate; margin-top: 15px">
             <thead>
                 {{-- <thead style="display: table-header-group"> --}}
-                <tr
-                    style="
+                <tr style="
               margin: 0;
               background: #fcbd021f;
               padding: 15px;
@@ -167,8 +166,7 @@
                     <td colspan="4">
                         <h3>
                             E-Reporting Absensi
-                            <p
-                                style="
+                            <p style="
                     font-weight: 300;
                     font-size: 85%;
                     color: #626262;
@@ -207,59 +205,35 @@
             </thead>
             <tbody>
                 @foreach ($dateFormatted as $key => $df)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td class="text-center">
-                            {!! $df !!}
-                        </td>
-                        @forelse ($pegawai->absensi as $item)
-                            @php
-                                $absensiRecord = $pegawai->getAbsensiRecordForDate($dates[$key]);
-                            @endphp
-                            <td class="text-center" colspan="6">
-                                @if ($absensiRecord)
-                                    @if ($absensiRecord->jam_masuk !== null)
-                                        <div class="jam-masuk">
-                                            {{ $absensiRecord->jam_masuk }}
-                                        </div>
-                                    @else
-                                        -
-                                    @endif
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td class="text-center" colspan="6">
-                                @if ($absensiRecord)
-                                    @if ($absensiRecord->jam_keluar !== null)
-                                        <div class="jam-keluar">
-                                            {{ $absensiRecord->jam_keluar }}
-                                        </div>
-                                    @else
-                                    -
-                                    @endif
-                                @else
-                                -
-                                @endif
-                            </td>
-                        @empty
-                            <td class="text-center">-</td>
-                            <td class="text-center">-</td>
-                        @endforelse
-                    </tr>
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td class="text-center">
+                        {!! $df !!}
+                    </td>
+
+                    @php
+                    $absensiRecord = $pegawai->getAbsensiRecordForDate($dates[$key]);
+                    @endphp
+                    <td class="text-center" colspan="6">
+                        @if ($absensiRecord && $absensiRecord->jam_masuk !== null)
+                        <div class="jam-masuk">
+                            {{ $absensiRecord->jam_masuk }}
+                        </div>
+                        @else
+                        -
+                        @endif
+                    </td>
+                    <td class="text-center" colspan="6">
+                        @if ($absensiRecord && $absensiRecord->jam_keluar !== null)
+                        <div class="jam-keluar">
+                            {{ $absensiRecord->jam_keluar }}
+                        </div>
+                        @else
+                        -
+                        @endif
+                    </td>
+                </tr>
                 @endforeach
-                {{-- @forelse($categories as $category)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td colspan="12">{{ $category->name }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="13" style="text-align: center">
-                            <h3>No data</h3>
-                        </td>
-                    </tr>
-                @endforelse --}}
             </tbody>
         </table>
     </section>

@@ -25,7 +25,7 @@ class UpdateProfilRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'nip' => 'required|numeric|unique:pegawai,nip,' . $this->id,
+            // 'nip' => 'required|numeric|unique:pegawai,nip,' . $this->id,
             'nama' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required|date',
@@ -61,7 +61,7 @@ class UpdateProfilRequest extends FormRequest
     public function attributes()
     {
         return [
-            'nip' => 'NIP',
+            // 'nip' => 'NIP',
             'nama' => 'Nama',
             'tempat_lahir' => 'Tempat lahir',
             'tanggal_lahir' => 'Tanggal lahir',

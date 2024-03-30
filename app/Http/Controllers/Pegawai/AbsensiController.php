@@ -14,6 +14,7 @@ class AbsensiController extends Controller
 {
     public function index()
     {
+        $pegawai = Pegawai::with('absensi')->where('id', auth()->user()->pegawai->id)->first();
         $firstOfDate = Carbon::now()->startOfMonth();
         $lastOfDate = Carbon::now()->endOfMonth();
 
@@ -26,7 +27,15 @@ class AbsensiController extends Controller
             $dates[] = $date->toDateString();
         }
 
-        return view('pegawai.absensi.index', compact('dates', 'dateFormatted'));
+        $data = [
+            'dateFormatted' => $dateFormatted,
+            'dates' => $dates,
+            'pegawai' => $pegawai,
+            'fromDate' => $firstOfDate,
+            'toDate' => $lastOfDate,
+        ];
+
+        return view('pegawai.absensi.index')->with($data);
     }
 
     public function filter(Request $request)

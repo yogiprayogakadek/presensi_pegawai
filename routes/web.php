@@ -43,6 +43,7 @@ Route::namespace('Main')->middleware(['auth', 'checkRole:admin', 'checkStatus'])
             Route::prefix('all')->as('all.')->group(function () {
                 Route::get('/', 'index')->name('index');
                 Route::post('/filter', 'filter')->name('filter');
+                Route::post('/printAll', 'printAll')->name('printAll');
             });
 
             Route::prefix('by-name')->as('by-name.')->group(function () {

@@ -12,40 +12,43 @@
     <div class="col-12">
         <div class="card mb-4">
             <div class="card-header">
+                <form action="{{ route('absensi.all.printAll') }}" method="POST">
                 <div class="row">
                     <div class="col-5">
                         Data Absensi
                     </div>
                     <div class="col-7">
-                        {{-- <div class="m-auto"></div> --}}
-                        <div class="row">
-                            <div class="col-4">
-                                <span>Dari Tanggal</span>
-                                <input type="date" name="from_date" id="from_date" class="form-control" value="{{ date('Y-m-01') }}">
-                            </div>
-                            <div class="col-4">
-                                <span>Sampai tanggal</span>
-                                <input type="date" name="to_date" id="to_date" class="form-control" value="{{ date('Y-m-t') }}">
-                            </div>
-                            <div class="col-2">
-                                <span>Kategori</span>
-                                <select name="kategori" id="kategori" class="form-control">
-                                    <option value="Masuk">Masuk</option>
-                                    <option value="Keluar">Keluar</option>
-                                </select>
-                            </div>
-                            <div class="col-2">
-                                <br>
-                                <button class="btn btn-outline-success btn-filter">
-                                    <i class="fa fa-filter"></i> Filter
-                                </button>
-                            </div>
-                            {{-- <div class="col-2">
+                        <div class="m-auto">
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>Dari Tanggal</span>
+                                    <input type="date" name="from_date" id="from_date" class="form-control" value="{{ date('Y-m-01') }}">
+                                </div>
+                                <div class="col-3">
+                                    <span>Sampai tanggal</span>
+                                    <input type="date" name="to_date" id="to_date" class="form-control" value="{{ date('Y-m-t') }}">
+                                </div>
+                                <div class="col-2">
+                                    <span>Kategori</span>
+                                    <select name="kategori" id="kategori" class="form-control">
+                                        <option value="Masuk">Masuk</option>
+                                        <option value="Keluar">Keluar</option>
+                                    </select>
+                                </div>
+                                <div class="col-2">
                                     <br>
-                                    <button class="btn btn-outline-primary btn-print">
+                                    <button class="btn btn-outline-success btn-filter" type="button">
+                                        <i class="fa fa-filter"></i> Filter
+                                    </button>
+                                </div>
+                                <div class="col-2">
+                                    <br>
+                                    @csrf
+                                    <button class="btn btn-outline-primary btn-print" type="submit">
                                         <i class="fa fa-print"></i> Print
                                     </button>
-                                </div> --}}
+                                </div>
+                            </div>
                         </div>
                         {{-- <a href="{{route('pegawai.print')}}">
                         <button type="button" class="btn btn-outline-success btn-print ml-2">
@@ -54,6 +57,7 @@
                         </a> --}}
                     </div>
                 </div>
+            </form>
             </div>
             <div class="card-body" id="render">
                 <table class="table table-hover table-bordered table-responsive">
@@ -87,7 +91,7 @@
                                 ($kategori == 'Masuk' && $absensiRecord->jam_masuk !== null) ||
                                 ($kategori == 'Keluar' && $absensiRecord->jam_keluar !== null))
                                 <div class="jam">
-                                    <i style="cursor: pointer;" class="fa fa-check btn-detail" data-absensi="{{ $absensiRecord }}" data-kategori="{{$kategori}}"></i>
+                                    <i style="cursor: pointer;" class="fa fa-check btn-detail" data-absensi="{{ $absensiRecord }}" data-kategori="{{ $kategori }}"></i>
                                 </div>
                                 @else
                                 <i class="fa fa-times" style="color: red;"></i>
@@ -125,10 +129,7 @@
     $(document).ready(function() {
         @if(session('status'))
         Swal.fire(
-            "{{ session('title') }}"
-            , "{{ session('message') }}"
-            , "{{ session('status') }}"
-        , );
+            "{{ session('title') }}", "{{ session('message') }}", "{{ session('status') }}", );
         @endif
 
         $('.btn-filter').on('click', function() {
@@ -193,19 +194,59 @@
         $('body').on('click', '.btn-detail', function() {
             let absensi = $(this).data('absensi');
             let kategori = $(this).data('kategori')
-            let jam = kategori == 'Masuk' ? absensi.jam_masuk : absensi.jam_keluar;
+            // let jam = kategori == 'Masuk' ? absensi.jam_masuk : absensi.jam_keluar;
 
-            let divJam = '<div class="btn-jam" style="cursor: pointer">' + jam + '</div>';
+            let jam;
 
-            $('.jam').append(divJam);
-            $('.btn-detail').prop('hidden', true);
+            if (kategori === 'Masuk') {
+                jam = absensi.jam_masuk;
+            } else if (kategori === 'Keluar') {
+                jam = absensi.jam_keluar;
+            }
+
+            let parentContainer = $(this).closest('td');
+            let divJam = '<div class="btn-jam-' + kategori + '" style="cursor: pointer">' + jam +
+                '</div>';
+
+            parentContainer.append(divJam);
+            parentContainer.find('.btn-detail').hide();
         });
 
-        $('body').on('click', '.btn-jam', function() {
-            $('.btn-detail').prop('hidden', false);
-            $('.btn-jam').prop('hidden', true);
+        $('body').on('click', '.btn-jam-Masuk', function() {
+            let container = $(this).closest('td');
+            container.find('.btn-detail').show();
+            container.find('.btn-jam-Masuk').hide();
         });
 
+        $('body').on('click', '.btn-jam-Keluar', function() {
+            let container = $(this).closest('td');
+            container.find('.btn-detail').show();
+            container.find('.btn-jam-Keluar').hide();
+        });
+
+        // $('body').on('click', '.btn-print', function() {
+        //     $.ajaxSetup({
+        //         headers: {
+        //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        //         }
+        //     });
+        //     let fromDate = $('#from_date').val();
+        //     let toDate = $('#to_date').val();
+        //     let kategori = $('select[name=kategori] option').filter(':selected').val()
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/absensi/all/printAll",
+        //         data: {
+        //             fromDate: fromDate
+        //             , toDate: toDate
+        //             , kategori: kategori
+        //         }
+        //         , dataType: "JSON",
+        //         success: function (response) {
+        //             console.log(response)
+        //         }
+        //     });
+        // })
     });
 
 </script>
